@@ -1,0 +1,5 @@
+micronaut:
+  application:
+    name: mn1dot3
+  server:
+    thread-selection: manual

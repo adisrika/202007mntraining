@@ -1,0 +1,11 @@
+micronaut:
+  application:
+    name: helloservice
+
+  netty:
+    event-loops:
+      default:
+        num-threads: 1
+
+greeting:
+  message: Hello from Dev

@@ -1,0 +1,5 @@
+profile: service
+defaultPackage: configserverdemo
+---
+testFramework: junit
+sourceLanguage: java
