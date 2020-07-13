@@ -1,0 +1,22 @@
+micronaut:
+  application:
+    name: shoppingservice
+  server:
+    port: 9090
+  http:
+    client:
+      read-timeout: 25s
+
+consul:
+  client:
+    registration:
+      enabled: true
+    defaultZone: ${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}
+
+tracing:
+  zipkin:
+    enabled: true
+    http:
+      url: http://localhost:9411
+    sampler:
+      probability: 1
