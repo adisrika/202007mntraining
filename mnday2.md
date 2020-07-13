@@ -54,7 +54,7 @@ public class Product {
 
 **ProductService.java**
 
-~~~
+~~~java
 package productservice;
 
 import io.reactivex.Flowable;
@@ -91,7 +91,7 @@ public class ProductService {
 
 **ProductController.java**
 
-~~~
+~~~java
 package productservice;
 
 import io.micronaut.http.annotation.Controller;
@@ -133,7 +133,7 @@ Add the following classes
 
 **ProductDetail.java**
 
-~~~
+~~~java
 package shoppingservice;
 
 import java.math.BigDecimal;
@@ -180,7 +180,7 @@ public class ProductDetail {
 
 **ProductDetailService.java**
 
-~~~
+~~~java
 package shoppingservice;
 
 import javax.inject.Singleton;
@@ -197,7 +197,7 @@ public class ProductDetailService {
 
 **ProductDetailController.java**
 
-~~~
+~~~java
 package shoppingservice;
 
 import io.micronaut.http.annotation.Controller;
@@ -215,8 +215,7 @@ public class ProductDetailController {
 
     @Get("/{productId}")
     public ProductDetail get(@PathVariable("productId") Long id) {
-        //return productService.get(id);
-        return new ProductDetail();
+        return productService.get(id);
     }
 }
 
