@@ -1,11 +1,11 @@
 plugins {
     id "com.diffplug.eclipse.apt" version "3.22.0"
     id "com.github.johnrengelman.shadow" version "6.0.0"
-    id "application"
+    id "java"
 }
 
 version "0.1"
-group "shoppingservice"
+group "samplefn"
 
 repositories {
     mavenCentral()
@@ -25,16 +25,8 @@ dependencies {
     implementation("io.micronaut:micronaut-inject")
     implementation("io.micronaut:micronaut-validation")
     implementation("io.micronaut:micronaut-runtime")
-    implementation("io.micronaut:micronaut-http-server-netty")
-    implementation("io.micronaut:micronaut-http-client")
-    implementation("io.micronaut:micronaut-discovery-client")
-    implementation("io.micronaut:micronaut-tracing")
-    implementation("io.opentracing.brave:brave-opentracing")
-    runtimeOnly("io.zipkin.brave:brave-instrumentation-http")
-    runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
-    implementation("io.micronaut.cache:micronaut-cache-caffeine")
-
     developmentOnly("io.micronaut:micronaut-runtime-osx:$micronautVersion")
+    implementation("io.micronaut.aws:micronaut-function-aws")
     runtimeOnly("ch.qos.logback:logback-classic")
     testAnnotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     testAnnotationProcessor("io.micronaut:micronaut-inject-java")
@@ -46,7 +38,6 @@ dependencies {
 
 test.classpath += configurations.developmentOnly
 
-mainClassName = "shoppingservice.Application"
 
 // use JUnit 5 platform
 test {
@@ -61,29 +52,17 @@ java {
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
     options.compilerArgs.addAll([
-            '-parameters',
-            // enables incremental compilation
-            '-Amicronaut.processing.incremental=true',
-            '-Amicronaut.processing.annotations=shoppingservice.*',
-            "-Amicronaut.processing.group=$project.group",
-            "-Amicronaut.processing.module=$project.name",
+        '-parameters',
+        // enables incremental compilation
+        '-Amicronaut.processing.incremental=true',
+        '-Amicronaut.processing.annotations=samplefn.*',
+        "-Amicronaut.processing.group=$project.group",
+        "-Amicronaut.processing.module=$project.name",
     ])
 }
 
 shadowJar {
     mergeServiceFiles()
-}
-
-tasks.withType(JavaExec) {
-    classpath += configurations.developmentOnly
-    jvmArgs('-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
-    if (gradle.startParameter.continuous) {
-        systemProperties(
-                'micronaut.io.watch.restart': 'true',
-                'micronaut.io.watch.enabled': 'true',
-                "micronaut.io.watch.paths": "src/main"
-        )
-    }
 }
 
 

@@ -1,6 +1,19 @@
 micronaut:
   application:
     name: productservice
+  router:
+    versioning:
+      enabled: true
+      header:
+        enabled: true
+      default-version: v1
+      parameter:
+        enabled: true
+        names: v
+  caches:
+    product-cach:
+      maximum-size: 100
+
 
 consul:
   client:
@@ -15,3 +28,39 @@ tracing:
       url: http://localhost:9411
     sampler:
       probability: 1
+
+
+endpoints:
+  all:
+    enabled: true
+    sensitive: false
+    port: 8081
+  health:
+    details-visible: anonymous
+  loggers:
+    write-sensitive: false
+
+jackson:
+  serialization:
+    indentOutput: true
+
+info:
+  app:
+    name: product-service
+
+custom:
+  threadpool:
+    one:
+      name: POOL1
+      number-of-threads: 2
+      data:
+        key1: val1
+        key-2: val2
+        number-of-threads: 10
+    two:
+      name: POOL2
+      number-of-threads: 20
+      data:
+        key1: val1
+        key-2: val2
+        number-of-threads: 50

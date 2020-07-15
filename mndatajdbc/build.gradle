@@ -5,7 +5,7 @@ plugins {
 }
 
 version "0.1"
-group "shoppingservice"
+group "mndatajdbc"
 
 repositories {
     mavenCentral()
@@ -21,21 +21,19 @@ dependencies {
     annotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     annotationProcessor("io.micronaut:micronaut-inject-java")
     annotationProcessor("io.micronaut:micronaut-validation")
+    annotationProcessor("io.micronaut.data:micronaut-data-processor")
     implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     implementation("io.micronaut:micronaut-inject")
     implementation("io.micronaut:micronaut-validation")
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-http-client")
-    implementation("io.micronaut:micronaut-discovery-client")
-    implementation("io.micronaut:micronaut-tracing")
-    implementation("io.opentracing.brave:brave-opentracing")
-    runtimeOnly("io.zipkin.brave:brave-instrumentation-http")
-    runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
-    implementation("io.micronaut.cache:micronaut-cache-caffeine")
-
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    implementation("io.micronaut.data:micronaut-data-jdbc")
     developmentOnly("io.micronaut:micronaut-runtime-osx:$micronautVersion")
     runtimeOnly("ch.qos.logback:logback-classic")
+    compileOnly("jakarta.persistence:jakarta.persistence-api:2.2.2")
+    runtimeOnly("com.h2database:h2")
     testAnnotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
     testAnnotationProcessor("io.micronaut:micronaut-inject-java")
     testImplementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))
@@ -46,7 +44,7 @@ dependencies {
 
 test.classpath += configurations.developmentOnly
 
-mainClassName = "shoppingservice.Application"
+mainClassName = "mndatajdbc.Application"
 
 // use JUnit 5 platform
 test {
@@ -61,12 +59,12 @@ java {
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
     options.compilerArgs.addAll([
-            '-parameters',
-            // enables incremental compilation
-            '-Amicronaut.processing.incremental=true',
-            '-Amicronaut.processing.annotations=shoppingservice.*',
-            "-Amicronaut.processing.group=$project.group",
-            "-Amicronaut.processing.module=$project.name",
+        '-parameters',
+        // enables incremental compilation
+        '-Amicronaut.processing.incremental=true',
+        '-Amicronaut.processing.annotations=mndatajdbc.*',
+        "-Amicronaut.processing.group=$project.group",
+        "-Amicronaut.processing.module=$project.name",
     ])
 }
 
@@ -79,9 +77,9 @@ tasks.withType(JavaExec) {
     jvmArgs('-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
     if (gradle.startParameter.continuous) {
         systemProperties(
-                'micronaut.io.watch.restart': 'true',
-                'micronaut.io.watch.enabled': 'true',
-                "micronaut.io.watch.paths": "src/main"
+            'micronaut.io.watch.restart':'true',
+            'micronaut.io.watch.enabled':'true',
+            "micronaut.io.watch.paths":"src/main"
         )
     }
 }

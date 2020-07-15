@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: dockermn
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [app-name, docker, file-watch, file-watch-osx, gradle, http-client, java, java-application, jib, junit, logback, netty-server, readme, yaml]

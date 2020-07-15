@@ -15,6 +15,9 @@ public class ProductDetailController {
     @Inject
     HttpClientConfiguration httpClientConfiguration;
 
+    @Inject
+    MyProcessor processor;
+
     private ProductDetailService productDetailService;
 
     public ProductDetailController(ProductDetailService productDetailService) {
@@ -39,6 +42,12 @@ public class ProductDetailController {
         httpClientConfiguration.getConnectionPoolConfiguration().setEnabled(true);
         System.out.println(httpClientConfiguration.getConnectionPoolConfiguration().isEnabled());
         System.out.println(httpClientConfiguration.getConnectionPoolConfiguration().getMaxConnections());
+        return "done";
+    }
+
+    @Get("/retry")
+    public String retry() {
+        processor.process();
         return "done";
     }
 }

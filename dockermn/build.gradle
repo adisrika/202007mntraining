@@ -1,11 +1,11 @@
 plugins {
     id "com.diffplug.eclipse.apt" version "3.22.0"
-    id "com.github.johnrengelman.shadow" version "6.0.0"
     id "application"
+    id "com.google.cloud.tools.jib" version "2.4.0"
 }
 
 version "0.1"
-group "shoppingservice"
+group "dockermn"
 
 repositories {
     mavenCentral()
@@ -27,13 +27,6 @@ dependencies {
     implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-http-client")
-    implementation("io.micronaut:micronaut-discovery-client")
-    implementation("io.micronaut:micronaut-tracing")
-    implementation("io.opentracing.brave:brave-opentracing")
-    runtimeOnly("io.zipkin.brave:brave-instrumentation-http")
-    runtimeOnly("io.zipkin.reporter2:zipkin-reporter")
-    implementation("io.micronaut.cache:micronaut-cache-caffeine")
-
     developmentOnly("io.micronaut:micronaut-runtime-osx:$micronautVersion")
     runtimeOnly("ch.qos.logback:logback-classic")
     testAnnotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
@@ -46,7 +39,7 @@ dependencies {
 
 test.classpath += configurations.developmentOnly
 
-mainClassName = "shoppingservice.Application"
+mainClassName = "dockermn.Application"
 
 // use JUnit 5 platform
 test {
@@ -61,30 +54,28 @@ java {
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
     options.compilerArgs.addAll([
-            '-parameters',
-            // enables incremental compilation
-            '-Amicronaut.processing.incremental=true',
-            '-Amicronaut.processing.annotations=shoppingservice.*',
-            "-Amicronaut.processing.group=$project.group",
-            "-Amicronaut.processing.module=$project.name",
+        '-parameters',
+        // enables incremental compilation
+        '-Amicronaut.processing.incremental=true',
+        '-Amicronaut.processing.annotations=dockermn.*',
+        "-Amicronaut.processing.group=$project.group",
+        "-Amicronaut.processing.module=$project.name",
     ])
 }
 
-shadowJar {
-    mergeServiceFiles()
-}
 
 tasks.withType(JavaExec) {
     classpath += configurations.developmentOnly
     jvmArgs('-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
     if (gradle.startParameter.continuous) {
         systemProperties(
-                'micronaut.io.watch.restart': 'true',
-                'micronaut.io.watch.enabled': 'true',
-                "micronaut.io.watch.paths": "src/main"
+            'micronaut.io.watch.restart':'true',
+            'micronaut.io.watch.enabled':'true',
+            "micronaut.io.watch.paths":"src/main"
         )
     }
 }
 
 
+//jib.to.image = 'gcr.io/dockermn/jib-image'
 

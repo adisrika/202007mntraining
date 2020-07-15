@@ -1,15 +1,15 @@
 package productservice;
 
-import io.micronaut.http.HttpRequest;
+import io.micronaut.core.version.annotation.Version;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Header;
 import io.micronaut.http.annotation.PathVariable;
-import io.micronaut.scheduling.TaskExecutors;
-import io.micronaut.scheduling.annotation.ExecuteOn;
-import io.reactivex.Flowable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 @Controller("/product")
 public class ProductController {
@@ -18,23 +18,27 @@ public class ProductController {
 
     private ProductService productService;
 
+    @Inject
+    @Named("two")
+    CustomThreadpoolConfig customThreadpoolConfig;
+
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
-    @Get("/")
-    @ExecuteOn(TaskExecutors.IO)
-    public Flowable<Product> all() {
-        return productService.list();
-    }
+//    @Get("/")
+//    @ExecuteOn(TaskExecutors.IO)
+//    public Flowable<Product> all() {
+//        return productDataService.list();
+//    }
 
     @Get("/{productId}")
-    public Product get(@PathVariable("productId") Long id, @Header("ch") String customHeader) {
-        LOGGER.info("Custom header " + customHeader);
+    public Product get(@PathVariable("productId") Long id) {
+        //LOGGER.info("Custom header " + customHeader);
         if (id != 2L) {
             sleep();
         }
-        return productService.get(id);
+        return productService.getProduct(id);
     }
 
     private void sleep() {
@@ -44,5 +48,24 @@ public class ProductController {
             e.printStackTrace();
         }
     }
+
+    @Version("v1")
+    @Get("/hello")
+    public String helloV1() {
+        return "Hello";
+    }
+
+    @Version("v2")
+    @Get("/hello")
+    public String helloV2() {
+        return "Hello V2";
+    }
+
+    @Get("configprop")
+    public CustomThreadpoolConfig configProp() {
+        LOGGER.info("keys {} ", customThreadpoolConfig.getData().keySet().contains("number-of-threads"));
+        return customThreadpoolConfig;
+    }
+
 
 }
