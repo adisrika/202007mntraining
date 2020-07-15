@@ -31,7 +31,9 @@ public class ProductController {
     @Get("/{productId}")
     public Product get(@PathVariable("productId") Long id, @Header("ch") String customHeader) {
         LOGGER.info("Custom header " + customHeader);
-        sleep();
+        if (id != 2L) {
+            sleep();
+        }
         return productService.get(id);
     }
 

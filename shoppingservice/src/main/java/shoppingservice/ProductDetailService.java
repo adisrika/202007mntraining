@@ -20,8 +20,7 @@ public class ProductDetailService {
     @Inject
     private ProductOperations productClient;
 
-    @Retryable(attempts = "2")
-    //@CircuitBreaker(attempts = "1", reset = "30s")
+    //@Retryable(attempts = "2")
     @NewSpan("prod.service")
     public ProductDetail getProductDetail(@SpanTag("product.id") Long id) {
         //HashMap<String, String> headers = new HashMap<>();

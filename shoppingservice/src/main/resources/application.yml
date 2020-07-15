@@ -5,13 +5,14 @@ micronaut:
     port: 9090
   http:
     client:
-      read-timeout: 25s
+      read-timeout: 5s
 
 consul:
   client:
     registration:
       enabled: true
     defaultZone: ${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}
+    logger-name: clogger
 
 tracing:
   zipkin:

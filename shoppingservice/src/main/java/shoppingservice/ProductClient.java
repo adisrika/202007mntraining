@@ -12,6 +12,7 @@ import io.reactivex.Flowable;
 import java.util.Map;
 
 @Client(id = "productservice")
+@CircuitBreaker(attempts = "1", reset = "30s")
 //@Retryable(attempts = "1")
 public interface ProductClient extends ProductOperations{
 
